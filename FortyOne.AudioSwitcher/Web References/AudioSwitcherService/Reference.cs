@@ -2,6 +2,7 @@
 // The service client now uses HttpClient to communicate with the SOAP endpoint.
 
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
