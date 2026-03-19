@@ -32,7 +32,6 @@
             this.txtErrorDetails = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.btnReport = new System.Windows.Forms.Button();
             this.txtError = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -77,16 +76,7 @@
             this.label2.TabIndex = 4;
             this.label2.Text = "Any additional information?";
             // 
-            // btnReport
-            // 
-            this.btnReport.Location = new System.Drawing.Point(135, 267);
-            this.btnReport.Name = "btnReport";
-            this.btnReport.Size = new System.Drawing.Size(75, 23);
-            this.btnReport.TabIndex = 2;
-            this.btnReport.Text = "Report";
-            this.btnReport.UseVisualStyleBackColor = true;
-            this.btnReport.Click += new System.EventHandler(this.btnReport_Click);
-            // 
+            //
             // txtError
             // 
             this.txtError.Location = new System.Drawing.Point(12, 152);
@@ -113,7 +103,6 @@
             this.ClientSize = new System.Drawing.Size(303, 302);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txtError);
-            this.Controls.Add(this.btnReport);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.txtErrorDetails);
@@ -137,7 +126,6 @@
         private System.Windows.Forms.TextBox txtErrorDetails;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button btnReport;
         private System.Windows.Forms.TextBox txtError;
         private System.Windows.Forms.Label label3;
     }
