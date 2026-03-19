@@ -53,7 +53,7 @@ namespace FortyOne.AudioSwitcher
                 if (!File.Exists(updaterPath))
                     File.WriteAllBytes(updaterPath, Resources.AutoUpdater);
 
-                Process.Start(updaterPath, Process.GetCurrentProcess().Id + " \"" + Assembly.GetEntryAssembly().Location + "\"");
+                Process.Start(updaterPath, Process.GetCurrentProcess().Id + " \"" + Environment.ProcessPath + "\"");
                 Application.Exit();
             }
             catch

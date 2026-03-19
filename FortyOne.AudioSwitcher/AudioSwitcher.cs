@@ -151,13 +151,19 @@ namespace FortyOne.AudioSwitcher
                         return titleAttribute.Title;
                     }
                 }
-                return Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
+                return Path.GetFileNameWithoutExtension(Environment.ProcessPath);
             }
         }
 
         public string AssemblyVersion
         {
-            get { return FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion; }
+            get
+            {
+                var location = Assembly.GetExecutingAssembly().Location;
+                if (string.IsNullOrEmpty(location))
+                    location = Environment.ProcessPath;
+                return FileVersionInfo.GetVersionInfo(location).ProductVersion;
+            }
         }
 
         public string AssemblyDescription

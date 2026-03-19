@@ -190,7 +190,7 @@ namespace FortyOne.AudioSwitcher.Configuration
                     {
                         var add =
                             Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-                        add.SetValue("AudioSwitcher", "\"" + Assembly.GetEntryAssembly().Location + "\"");
+                        add.SetValue("AudioSwitcher", "\"" + Environment.ProcessPath + "\"");
                     }
                     else
                     {
