@@ -426,61 +426,64 @@ namespace FortyOne.AudioSwitcher
                 return;
 
             if (Program.Settings.EnableQuickSwitch)
-            {
-                if (FavouriteDeviceManager.FavouriteDeviceCount > 0)
-                {
-                    var changed = false;
-                    var currentDefaultDevice = AudioDeviceManager.Controller.DefaultPlaybackDevice;
-                    var candidate = FavouriteDeviceManager.GetNextFavouritePlaybackDevice(currentDefaultDevice);
-                    var attemptsCount = FavouriteDeviceManager.FavouritePlaybackDeviceCount;
-                    for (var i = 0; !changed && i < attemptsCount; i++)
-                    {
-                        changed = await candidate.SetAsDefaultAsync();
-
-                        if (changed && Program.Settings.DualSwitchMode)
-                            await candidate.SetAsDefaultCommunicationsAsync();
-
-                        if (!changed)
-                            candidate = FavouriteDeviceManager.GetNextFavouritePlaybackDevice(candidate);
-                    }
-                }
-                else
-                {
-                    var currentDefault = AudioDeviceManager.Controller.DefaultPlaybackDevice;
-                    var playbackDevices = (await AudioDeviceManager.Controller.GetPlaybackDevicesAsync(DeviceState.Active))
-                                            .Where(x => !HiddenDeviceManager.IsHiddenDevice(x))
-                                            .OrderBy(x => x.Name)
-                                            .ToList();
-
-                    var deviceIndex = playbackDevices.IndexOf(currentDefault);
-                    var newIndex = deviceIndex;
-
-                    while (true)
-                    {
-                        newIndex = (newIndex + 1) % playbackDevices.Count;
-
-                        if (newIndex == deviceIndex)
-                            break;
-
-                        try
-                        {
-                            var newDevice = playbackDevices[newIndex];
-                            if (await newDevice.SetAsDefaultAsync())
-                                break;
-                        }
-                        catch
-                        {
-                            // ignored
-                        }
-                    }
-                }
-            }
+                await SwitchToNextDeviceAsync();
             else
             {
                 RefreshNotifyIconItems();
                 var mi = typeof(NotifyIcon).GetMethod("ShowContextMenu",
                     BindingFlags.Instance | BindingFlags.NonPublic);
                 mi.Invoke(notifyIcon1, null);
+            }
+        }
+
+        private async Task SwitchToNextDeviceAsync()
+        {
+            if (FavouriteDeviceManager.FavouriteDeviceCount > 0)
+            {
+                var changed = false;
+                var currentDefaultDevice = AudioDeviceManager.Controller.DefaultPlaybackDevice;
+                var candidate = FavouriteDeviceManager.GetNextFavouritePlaybackDevice(currentDefaultDevice);
+                var attemptsCount = FavouriteDeviceManager.FavouritePlaybackDeviceCount;
+                for (var i = 0; !changed && i < attemptsCount; i++)
+                {
+                    changed = await candidate.SetAsDefaultAsync();
+
+                    if (changed && Program.Settings.DualSwitchMode)
+                        await candidate.SetAsDefaultCommunicationsAsync();
+
+                    if (!changed)
+                        candidate = FavouriteDeviceManager.GetNextFavouritePlaybackDevice(candidate);
+                }
+            }
+            else
+            {
+                var currentDefault = AudioDeviceManager.Controller.DefaultPlaybackDevice;
+                var playbackDevices = (await AudioDeviceManager.Controller.GetPlaybackDevicesAsync(DeviceState.Active))
+                                        .Where(x => !HiddenDeviceManager.IsHiddenDevice(x))
+                                        .OrderBy(x => x.Name)
+                                        .ToList();
+
+                var deviceIndex = playbackDevices.IndexOf(currentDefault);
+                var newIndex = deviceIndex;
+
+                while (true)
+                {
+                    newIndex = (newIndex + 1) % playbackDevices.Count;
+
+                    if (newIndex == deviceIndex)
+                        break;
+
+                    try
+                    {
+                        var newDevice = playbackDevices[newIndex];
+                        if (await newDevice.SetAsDefaultAsync())
+                            break;
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
+                }
             }
         }
 
@@ -1251,6 +1254,12 @@ namespace FortyOne.AudioSwitcher
             if (sender is HotKey)
             {
                 var hk = sender as HotKey;
+
+                if (hk.IsToggle)
+                {
+                    await SwitchToNextDeviceAsync();
+                    return;
+                }
 
                 if (hk.Device == null || hk.Device.IsDefaultDevice)
                     return;
