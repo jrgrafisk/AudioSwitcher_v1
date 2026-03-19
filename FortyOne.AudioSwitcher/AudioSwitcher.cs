@@ -355,11 +355,6 @@ namespace FortyOne.AudioSwitcher
             base.SetVisibleCore(value);
         }
 
-        private static void Donate()
-        {
-            Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=Q9TDQPY4B369A");
-        }
-
         private void mnuFavouritePlaybackDevice_Click(object sender, EventArgs e)
         {
             if (SelectedPlaybackDevice == null)
@@ -628,11 +623,6 @@ namespace FortyOne.AudioSwitcher
                 Program.Settings.StartupRecordingDeviceID = SelectedRecordingDevice.Id;
 
             RefreshRecordingDropDownButton();
-        }
-
-        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            Process.Start("http://audioswit.ch/er?utm_source=client&utm_medium=direct&utm_campaign=client_" + AssemblyVersion.Replace(".", "_"));
         }
 
         private void chkShowDiabledDevices_CheckedChanged(object sender, EventArgs e)
@@ -1203,7 +1193,11 @@ namespace FortyOne.AudioSwitcher
         private void PostPlaybackMenuClick(Guid id)
         {
             if (Program.Settings.ForceAppsFollowDefault)
-                AppAudioRouter.ClearPersistedEndpoints();
+            {
+                var endpointId = AppAudioRouter.GetEndpointId(id);
+                if (endpointId != null)
+                    AppAudioRouter.RouteAllProcessesToDevice(endpointId);
+            }
 
             RefreshPlaybackDevices();
             RefreshPlaybackDropDownButton();
@@ -1230,7 +1224,11 @@ namespace FortyOne.AudioSwitcher
         private void PostRecordingMenuClick(Guid id)
         {
             if (Program.Settings.ForceAppsFollowDefault)
-                AppAudioRouter.ClearPersistedEndpoints();
+            {
+                var endpointId = AppAudioRouter.GetEndpointId(id);
+                if (endpointId != null)
+                    AppAudioRouter.RouteAllProcessesToDevice(endpointId);
+            }
 
             RefreshRecordingDevices();
             RefreshRecordingDropDownButton();
@@ -1271,9 +1269,6 @@ namespace FortyOne.AudioSwitcher
 
                 if (Program.Settings.DualSwitchMode)
                     await hk.Device.SetAsDefaultCommunicationsAsync();
-
-                if (Program.Settings.ForceAppsFollowDefault)
-                    AppAudioRouter.ClearPersistedEndpoints();
             }
         }
 
@@ -1317,9 +1312,6 @@ namespace FortyOne.AudioSwitcher
 
                 if (Program.Settings.DualSwitchMode)
                     await dev.SetAsDefaultCommunicationsAsync();
-
-                if (Program.Settings.ForceAppsFollowDefault)
-                    AppAudioRouter.ClearPersistedEndpoints();
             }
         }
 
@@ -1369,24 +1361,10 @@ namespace FortyOne.AudioSwitcher
             udf.ShowDialog(this);
         }
 
-        private void statusLabelDonate_Click(object sender, EventArgs e)
-        {
-            Donate();
-        }
 
         private void updateAvailableToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowUpdateForm(true);
-        }
-
-        private void pictureBox2_Click(object sender, EventArgs e)
-        {
-            Process.Start("https://www.twitter.com/xenolightning");
-        }
-
-        private void pictureBox1_Click_1(object sender, EventArgs e)
-        {
-            Process.Start("https://github.com/xenolightning/AudioSwitcher_v1");
         }
 
         private void chkNotifyUpdates_CheckedChanged(object sender, EventArgs e)
@@ -1394,9 +1372,9 @@ namespace FortyOne.AudioSwitcher
             Program.Settings.UpdateNotificationsEnabled = chkNotifyUpdates.Checked;
         }
 
-        private void twitterLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void chkForceAppsFollowDefault_CheckedChanged(object sender, EventArgs e)
         {
-            Process.Start("https://www.twitter.com/xenolightning");
+            Program.Settings.ForceAppsFollowDefault = chkForceAppsFollowDefault.Checked;
         }
 
         private void openControlPanelPlayback_Click(object sender, EventArgs e)
@@ -1456,11 +1434,6 @@ namespace FortyOne.AudioSwitcher
 				}));
 			}
 		}
-
-        private void chkForceAppsFollowDefault_CheckedChanged(object sender, EventArgs e)
-        {
-            Program.Settings.ForceAppsFollowDefault = chkForceAppsFollowDefault.Checked;
-        }
 
         private void mnuHidePlaybackDevice_Click(object sender, EventArgs e)
         {
