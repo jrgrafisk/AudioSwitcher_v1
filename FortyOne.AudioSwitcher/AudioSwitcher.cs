@@ -528,7 +528,7 @@ namespace FortyOne.AudioSwitcher
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://github.com/jrgrafisk/AudioSwitcher_v1");
+            Process.Start("https://github.com/jrgrafisk/AudioSwitcher_v1/releases");
         }
 
         private void mnuSetPlaybackStartupDevice_Click(object sender, EventArgs e)

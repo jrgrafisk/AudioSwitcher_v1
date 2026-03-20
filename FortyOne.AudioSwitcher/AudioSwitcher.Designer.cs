@@ -91,6 +91,7 @@
 			this.tapAbout = new System.Windows.Forms.TabPage();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
+			this.label7 = new System.Windows.Forms.Label();
 			this.linkLabel1 = new System.Windows.Forms.LinkLabel();
 			this.btnTestError = new System.Windows.Forms.Button();
 			this.label2 = new System.Windows.Forms.Label();
@@ -734,6 +735,7 @@
 			// 
 			this.tapAbout.Controls.Add(this.label3);
 			this.tapAbout.Controls.Add(this.label6);
+			this.tapAbout.Controls.Add(this.label7);
 			this.tapAbout.Controls.Add(this.linkLabel1);
 			this.tapAbout.Controls.Add(this.btnTestError);
 			this.tapAbout.Controls.Add(this.label2);
@@ -769,6 +771,16 @@
 			this.label6.TabIndex = 13;
 			this.label6.Text = "Original by Sean Chapman (@xenolightning)";
 			// 
+			// label7
+			//
+			this.label7.AutoSize = true;
+			this.label7.Location = new System.Drawing.Point(8, 137);
+			this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(120, 13);
+			this.label7.TabIndex = 17;
+			this.label7.Text = "For manual updates:";
+			//
 			// linkLabel1
 			//
 			this.linkLabel1.AutoSize = true;
@@ -779,7 +791,7 @@
 			this.linkLabel1.Size = new System.Drawing.Size(200, 13);
 			this.linkLabel1.TabIndex = 12;
 			this.linkLabel1.TabStop = true;
-			this.linkLabel1.Text = "github.com/jrgrafisk/AudioSwitcher_v1";
+			this.linkLabel1.Text = "github.com/jrgrafisk/AudioSwitcher_v1/releases";
 			this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
 			// 
 			// btnTestError
@@ -1009,6 +1021,7 @@
         private System.Windows.Forms.CheckBox chkShowDiabledDevices;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.CheckBox chkShowDPDeviceIconInTray;
         private System.Windows.Forms.ToolStripMenuItem preferencesToolStripMenuItem;
         private System.Windows.Forms.Button btnClearAll;
