@@ -10,10 +10,12 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using AudioSwitcher.AudioApi;
 using AudioSwitcher.AudioApi.Observables;
 using FortyOne.AudioSwitcher.Configuration;
+using FortyOne.AudioSwitcher.Helpers;
 using FortyOne.AudioSwitcher.HotKeyData;
 using FortyOne.AudioSwitcher.Properties;
 
