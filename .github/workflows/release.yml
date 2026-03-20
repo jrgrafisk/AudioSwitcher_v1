@@ -39,12 +39,28 @@ jobs:
           -p:GenerateAssemblyInfo=false
           -o publish/AudioSwitcher
 
-      - name: Upload unsigned artifact for signing
+      - name: Restore FocusGuard dependencies
+        run: dotnet restore FocusGuard/FocusGuard.csproj
+
+      - name: Publish FocusGuard (single-file)
+        run: >
+          dotnet publish FocusGuard/FocusGuard.csproj
+          -c Release
+          -r win-x64
+          --self-contained true
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:GenerateAssemblyInfo=false
+          -o publish/FocusGuard
+
+      - name: Upload unsigned artifacts for signing
         id: upload-unsigned
         uses: actions/upload-artifact@v4
         with:
           name: unsigned-exe
-          path: publish/AudioSwitcher/AudioSwitcher.exe
+          path: |
+            publish/AudioSwitcher/AudioSwitcher.exe
+            publish/FocusGuard/FocusGuard.exe
 
       # ---------------------------------------------------------------
       # SignPath Foundation — free OSS code signing
@@ -67,10 +83,11 @@ jobs:
           wait-for-completion: true
           output-artifact-directory: publish/signed
 
-      - name: Replace unsigned exe with signed exe
+      - name: Replace unsigned exes with signed exes
         shell: pwsh
         run: |
           Copy-Item publish/signed/AudioSwitcher.exe publish/AudioSwitcher/AudioSwitcher.exe -Force
+          Copy-Item publish/signed/FocusGuard.exe    publish/FocusGuard/FocusGuard.exe       -Force
 
       - name: Determine release tag
         id: tag
@@ -86,6 +103,7 @@ jobs:
         shell: pwsh
         run: |
           Compress-Archive -Path publish/AudioSwitcher/* -DestinationPath AudioSwitcher-${{ steps.tag.outputs.value }}-win-x86.zip
+          Compress-Archive -Path publish/FocusGuard/*    -DestinationPath FocusGuard-${{ steps.tag.outputs.value }}-win-x64.zip
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -94,7 +112,9 @@ jobs:
           name: AudioSwitcher ${{ steps.tag.outputs.value }}
           draft: false
           prerelease: false
-          files: AudioSwitcher-${{ steps.tag.outputs.value }}-win-x86.zip
+          files: |
+            AudioSwitcher-${{ steps.tag.outputs.value }}-win-x86.zip
+            FocusGuard-${{ steps.tag.outputs.value }}-win-x64.zip
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
