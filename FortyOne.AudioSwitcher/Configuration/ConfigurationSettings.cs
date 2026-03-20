@@ -327,6 +327,9 @@ namespace FortyOne.AudioSwitcher.Configuration
 
             if (!SettingExists(SETTING_HIDDENDEVICES))
                 HiddenDevices = "[]";
+
+            if (!SettingExists(SETTING_CUSTOMDEVICENAMES))
+                CustomDeviceNames = "";
         }
 
         public void LoadFrom(ConfigurationSettings otherSettings)
@@ -350,6 +353,7 @@ namespace FortyOne.AudioSwitcher.Configuration
             WindowWidth = otherSettings.WindowWidth;
             ForceAppsFollowDefault = otherSettings.ForceAppsFollowDefault;
             HiddenDevices = otherSettings.HiddenDevices;
+            CustomDeviceNames = otherSettings.CustomDeviceNames;
         }
 
         public bool SettingExists(string name)
